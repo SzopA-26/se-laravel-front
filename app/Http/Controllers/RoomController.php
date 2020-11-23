@@ -15,6 +15,8 @@ use App\Room;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\MockObject\Api;
 
 class RoomController extends Controller
 {
@@ -34,8 +36,6 @@ class RoomController extends Controller
         $u = Auth::id();
         $user = User::findOrFail($u);
 
-//        return auth()->user()->isUpdateInfo();
-
         if(!auth()->user()->isUpdateInfo()) {
             return redirect()->route('user.edit', ['user' => $user->id])->with('alert', 'กรุณาแก้ไขข้อมูลให้ครบถ้วน');
         }
@@ -46,6 +46,8 @@ class RoomController extends Controller
         $rooms = Room::get()->where('type_id', $type->id);
         $bill = Bill::get()->where('room_id','=', $user->room_id)
             ->where('activated_at','<=','รอชำระ');
+
+
 
 
 
@@ -139,10 +141,25 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        $room = Room::findOrFail($id);
-        $room_images = DB::table('room_images')->select('*')->where('room_id',$room->id)->get();
+//        $room = Room::findOrFail($id);
+//        $room_images = DB::table('room_images')->select('*')->where('room_id',$room->id)->get();
 //        dd($room_images);
-        return view('rooms.show',['room' => $room, 'room_images' => $room_images]);
+
+        $response = Http::get('http://localhost:9090/api/room/' . $id);
+        $room = $response;
+        $response = Http::get('http://localhost:9090/api/type/' . $room["type_id"]);
+        $type = $response;
+        $response = Http::get('http://localhost:9090/api/building/' . $room["building_id"]);
+        $building = $response;
+        $response = Http::get('http://localhost:9090/api/room_image/room_id/' . $id);
+        $room_images = $response;
+
+        return view('rooms.show',[
+            'room' => $room,
+            'type' => $type,
+            'room_images' => $room_images,
+            'building' => $building
+        ]);
     }
 
     /**
@@ -232,5 +249,11 @@ class RoomController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function test()
+    {
+
     }
 }

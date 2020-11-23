@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -37,5 +38,15 @@ class HomeController extends Controller
     public function neighborhood() {
         return view('neighborhood');
     }
+
+    public function test() {
+        $res = Http::get('http://localhost:9090/api/users');
+
+        return view($res);
+    }
+
+
+
+
 
 }

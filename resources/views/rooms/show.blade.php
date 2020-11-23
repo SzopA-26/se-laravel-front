@@ -36,7 +36,7 @@
     <div class="container ">
         <div class="card border-warning" >
             <div class="card-header">
-                <h1> ตึก {{ $room->building->name }} ชั้น {{ $room->floor }} ห้อง {{ $room->number }}</h1>
+                <h1> ตึก {{ $building["name"] }} ชั้น {{ $room["floor"] }} ห้อง {{ $room["number"] }}</h1>
             </div>
             <div class="card-body">
                 <div class="container py-2">
@@ -46,9 +46,9 @@
                                 <!-- main slider carousel items -->
 
                                 <div class="carousel-inner">
-                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)
+                                    @foreach($room_images as $roomImage)
                                         <div class="{{ $loop->first ? 'active' : '' }} carousel-item" data-slide-number="{{ $loop->index }}">
-                                            <img src="{{ $roomImage->image_path }}" class="img-fluid">
+{{--                                            <img src="{{ $roomImage["image_path"] }}" class="img-fluid">--}}
                                         </div>
                                     @endforeach
                                     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
@@ -63,10 +63,10 @@
                                 <!-- main slider carousel nav controls -->
 
                                 <ul class="carousel-indicators list-inline mx-auto border px-2">
-                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)
+                                    @foreach($room_images as $roomImage)
                                         <li class="list-inline-item active">
                                             <a id="carousel-selector-0" class="selected" data-slide-to="{{ $loop->index }}" data-target="#myCarousel">
-                                                <img src="{{ $roomImage->image_path }}" class="img-fluid">
+{{--                                                <img src="{{ $roomImage["image_path"] }}" class="img-fluid">--}}
                                             </a>
                                         </li>
                                     @endforeach
@@ -83,23 +83,23 @@
                                         <tbody>
                                         <tr>
                                             <th scope="row">ห้องประเภท</th>
-                                            <td> {{ $room->type->name }}</td>
+                                            <td> {{ $type["name"] }}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ขนาด</th>
-                                            <td>{{ $room->type->size }} ตร.ม</td>
+                                            <td>{{ $type["size"] }} ตร.ม</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">รายเดือน</th>
-                                            <td>{{ $room->type->price }}  บาท</td>
+                                            <td>{{ $type["price"] }}  บาท</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ค่าไฟ</th>
-                                            <td>{{ $room->building->electric_rate }}  บาทต่อยูนิต</td>
+                                            <td>{{ $building["electric_rate"] }}  บาทต่อยูนิต</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ค่าน้ำ</th>
-                                            <td>{{ $room->building->water_rate }}  บาทต่อยูนิต</td>
+                                            <td>{{ $building["water_rate"] }}  บาทต่อยูนิต</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div style="padding-top: 2rem;">
-                                <a href="{{ route('requests.create',[ 'room' => $room->id ] )}}"><button type="button"   class="btn btn-outline-success w-100">จองห้อง</button></a>
+                                <a href="{{ route('requests.create',[ 'room' => $room["id"] ] )}}"><button type="button"   class="btn btn-outline-success w-100">จองห้อง</button></a>
                             </div>
 
 

@@ -25,6 +25,8 @@ Route::get('/information', 'HomeController@information')->name('home.information
 Route::get('/gallery', 'HomeController@gallery')->name('home.gallery');
 Route::get('/neighborhood', 'HomeController@neighborhood')->name('home.neighborhood');
 
+
+
 Route::get('/rooms/show-room-staff/{id}', 'RoomController@showStaff')->name('rooms.show.staff');
 
 Route::get('/rooms/show-bill-history/{id}/show/{bill}', 'ReceiptController@showBillHistory')->name('rooms.show.billHistory');
@@ -87,4 +89,6 @@ Route::get('/profile/delete/img/{user}','UserController@deleteImg')->name('user.
 Route::post('/profile/update/password/{user}','UserController@updatePassword')->name('user.update.password');
 
 Route::get('/reports/{report}/save','ReportController@save')->name('reports.save');
+
+
 
