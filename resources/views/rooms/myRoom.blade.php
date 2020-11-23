@@ -105,10 +105,10 @@
 
                                 <dt class="col-sm-2"><i class="fas fa-wifi"></i>&nbsp;&nbsp; Wifi Code </dt>
                                 <dd class="col-sm-9">
-                                    @if($wifi_code != null)
+                                    @if(count($wifi_code) != 0)
                                         <div class="row">
-                                            <p class="wifi ">{{ $wifi_code->code }}</p>
-                                            <p style="margin-left: 30px">(หมดอายุวันที่ {{ $wifi_code->expire_at }})</p>
+                                            <p class="wifi ">{{ $wifi_code[0]->code }}</p>
+                                            <p style="margin-left: 30px">(หมดอายุวันที่ {{ $wifi_code[0]->expire_at }})</p>
                                         </div>
                                     @else
                                         ไม่มี wifi package

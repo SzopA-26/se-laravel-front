@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class User extends Authenticatable
 {
@@ -76,9 +77,11 @@ class User extends Authenticatable
     }
 
     public function haveWifi($id){
-        $user = User::findOrFail($id);
-        $wifi = $user->wifiCodes;
-        return ($wifi->count() != 0);
+        // $user = User::findOrFail($id);
+        $user = json_decode(Http::get('http://localhost:9090/api/user/' . $id));
+        // $wifi = $user->wifiCodes;
+        $wifi = json_decode(Http::get('http://localhost:9090/api/wifi_codes/user_id/' . $user->id));
+        return (count($wifi) != 0);
     }
 
     public function isUpdateInfo() {
