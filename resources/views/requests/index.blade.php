@@ -26,12 +26,12 @@
                                 @foreach($buildings as $b)
                                     <option
                                         @isset($building)
-                                        @if($b->id == $building->id)
-                                        selected
+                                        @if($b["id"] == $building["id"])
+                                            selected
                                         @endif
                                         @endisset
-                                        value="{{ route('requests.index.building', ['type' => $selected_type->id, 'building' => $b->id]) }}">
-                                        ตึก {{ $b->name }}
+                                        value="{{ route('requests.index.building', ['type' => $selected_type["id"], 'building' => $b["id"]]) }}">
+                                        ตึก {{ $b["name"] }}
                                     </option>
                                 @endforeach
                             </select>
@@ -45,14 +45,14 @@
                             >
                                 <option selected disabled>เลือกชั้น </option>
                                 @isset($building)
-                                    @for($i=1; $i <= $building->total_floor; $i++)
+                                    @for($i=1; $i <= $building["total_floor"]; $i++)
                                         <option
                                             @isset($selected_floor)
                                             @if($i == $selected_floor)
                                             selected
                                             @endif
                                             @endisset
-                                            value="{{ route('requests.index.building.floor', ['type' => $selected_type->id, 'building' => $building->id, 'floor' => $i]) }}"
+                                            value="{{ route('requests.index.building.floor', ['type' => $selected_type["id"], 'building' => $building["id"], 'floor' => $i]) }}"
                                         >ชั้น {{ $i }}</option>
                                     @endfor
                                 @endisset
@@ -82,11 +82,11 @@
                     </thead>
                     <tbody>
                     @foreach($requests as $req)
-                        @if($req->status == 'สำเร็จ')
+                        @if($req["status"] == 'สำเร็จ')
                             @continue
                         @endif
                         @isset($building)
-                            @if($building->id != $req->room->building_id)
+                            @if($building["id"] != $req->room->building_id)
                                 @continue
                             @endif
                         @endisset
@@ -106,7 +106,7 @@
                             @else
                                 <td style="color: blue">รอการชำระเงิน</td>
                             @endif
-                            <td><a href="{{ route("requests.show", ['request' => $req->id]) }}" type="button" class="btn btn-outline-primary">แสดง</a></td>
+                            <td><a href="{{ route("requests.show", ['request' => $req["id"]]) }}" type="button" class="btn btn-outline-primary">แสดง</a></td>
                         </tr>
                     @endforeach
                     </tbody>

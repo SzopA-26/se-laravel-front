@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class RequestController extends Controller
 {
@@ -22,10 +23,12 @@ class RequestController extends Controller
      */
     public function index()
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find(1);
-        $buildings = Building::all();
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . 1),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -42,10 +45,11 @@ class RequestController extends Controller
      */
     public function indexType($type_id)
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find($type_id);
-        $buildings = Building::all();
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -63,11 +67,12 @@ class RequestController extends Controller
      */
     public function indexBuilding($type_id, $building_id)
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find($type_id);
-        $buildings = Building::all();
-        $building = Building::findOrFail($building_id);
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $building_id),true);
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -87,11 +92,12 @@ class RequestController extends Controller
      */
     public function indexBuildingFloor($type_id, $building_id, $floor)
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find($type_id);
-        $buildings = Building::all();
-        $building = Building::findOrFail($building_id);
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $building_id),true);
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -110,8 +116,16 @@ class RequestController extends Controller
      */
     public function create($room)
     {
-        $room = Room::findOrFail($room);
-        return view('requests.create', [ 'room'  => $room ]);
+        $room = json_decode(Http::get('http://localhost:9090/api/room/'.$room),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
+
+
+        return view('requests.create', [
+            'building'=> $building,
+            'room' => $room,
+            'type'=> $type
+            ]);
 
     }
 
@@ -127,21 +141,43 @@ class RequestController extends Controller
             'checkin_date' => ['required', 'date', 'after:today']
         ]);
 
-        $req = new BookingRequest;
-        $req->user_id = $request->input('user_id');
-        $req->room_id = $request->input('room_id');
-        $req->checkIn_at = $request->input('checkin_date');
 
-        $room = Room::findOrFail($request->input('room_id'));
-        $room->available = 'no';
-        $room->save();
 
-        $user = User::findOrFail($request->input('user_id'));
-        $user->room_id = $req->room_id;
-        $user->checkIn_at = $req->checkIn_at;
-        $user->save();
+        $response_req = Http::asForm()->post('http://localhost:9090/api/booking_requests',[
+            'user_id' => $request->input('user_id'),
+            'room_id' => $request->input('room_id'),
+            'checkIn_at' => $request->input('checkin_date'),
+            'admin_id' => Auth::id(),
+            'status' => 'รอการยืนยัน',
+            'created_at' => Carbon::now()->toDateString()
 
-        $req->save();
+
+        ]);
+        $room = json_decode(Http::get('http://localhost:9090/api/room/'.$request->input('room_id')),true);
+        $response_room = Http::asForm()->put('http://localhost:9090/api/room',[
+            'available' => 'no',
+            'id' => $request->input('room_id'),
+        ]);
+
+        $user = json_decode(Http::get('http://localhost:9090/api/user/'.$request->input('user_id')),true);
+        $response_user = Http::asForm()->put('http://localhost:9090/api/users',[
+            'room_id' => $request->input('room_id'),
+            'checkIn_at' => $request->input('checkin_date'),
+            'id' => $request->input('user_id'),
+            'title' => $user['title'],
+            'first_name' => $user['first_name'],
+            'last_name' => $user["last_name"],
+            'email' => $user["email"],
+            'birth_date' => Carbon::parse($user["birth_date"])->toDateString(),
+            'citizen_id' => $user["citizen_id"],
+            'address' => $user["address"],
+            'phone_number_1' => $user["phone_number_1"],
+            'phone_number_2' => $user["phone_number_2"],
+            'money' => $user["money"],
+            'invited' => $user["invited"],
+            'img' => $user["img"]
+        ]);
+
         return redirect()->route('home.index');
     }
 
@@ -153,8 +189,21 @@ class RequestController extends Controller
      */
     public function show($id)
     {
-        $request = BookingRequest::findOrFail($id);
-        return view('requests.show', ['request' => $request]);
+        $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id),true);
+        $user = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $request["id"]),true);
+        $room = json_decode(Http::get('http://localhost:9090/api/room/' . $request["room_id"]),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
+
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
+
+
+
+        return view('requests.show', [
+            'request' => $request,
+            'user'=> $user,
+            'building'=> $building,
+            'room' => $room,
+            'type'=> $type]);
 
     }
 
@@ -178,23 +227,6 @@ class RequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        $user_now = Auth::id();
-//        $request = BookingRequest::findOrFail($id);
-//        $room = Room::findOrFail($request->room_id);
-//        $request->admin_id = $user_now;
-//        $request->status = 'ยืนยันแล้ว';
-//        $request->save();
-//
-//
-//        $user = User::findOrFail($request->user_id);
-//        $user->room_id = $request->room_id;
-//        $user->checkIn_at = $request->checkIn_at;
-//        $user->save();
-//
-//
-//
-//        return redirect()->route('requests.index');
-
 
 
     }

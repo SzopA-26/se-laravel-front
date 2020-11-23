@@ -118,7 +118,7 @@
                                         @else
                                             style="color: red"
                                         @endif
-                                        >{{ $room->available }}</td>
+                                        >{{ $room["available"] }}</td>
                                         <td><a href="{{ route("rooms.show.staff", ['id' => $room["id"]]) }}"><button type="button" class="btn btn-outline-primary">แสดง</button></a></td>
                                     @else
                                         <td><a href="{{ route("rooms.show",['room' => $room["id"]]) }}"><button type="button" class="btn btn-outline-success">แสดง</button></a></td>
