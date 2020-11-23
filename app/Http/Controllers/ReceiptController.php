@@ -70,16 +70,6 @@ class ReceiptController extends Controller
         $bill->status = 'รอชำระ';
         $bill->save();
 
-//        $newbill = new Bill();
-//        $newbill->room_id = $bill->room_id;
-//        $newbill->user_id = Auth::id();
-//        $newbill->water_unit = $water_unit;
-//        $newbill->electric_unit = $electric_unit;
-//        $newbill->room_price = $bill->room_price;
-//        $newbill->total_price = $totalPrice;
-//        $newbill->activated_at = Carbon::create($bill->activated_at)->addMonth(1)->toDateString();
-//        $newbill->save();
-
 
 
         return redirect()->route('receipts.index');
