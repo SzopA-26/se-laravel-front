@@ -40,15 +40,10 @@ class RoomController extends Controller
             return redirect()->route('user.edit', ['user' => $user->id])->with('alert', 'กรุณาแก้ไขข้อมูลให้ครบถ้วน');
         }
 
-        $types = Type::all();
-        $type = Type::find($id);
-        $buildings = Building::all();
-        $rooms = Room::get()->where('type_id', $type->id);
-        $bill = Bill::get()->where('room_id','=', $user->room_id)
-            ->where('activated_at','<=','รอชำระ');
-
-
-
+        $types = json_decode(Http::get('http://localhost:9090/api/types'), true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+        $rooms = json_decode(Http::get('http://localhost:9090/api/room/type_id/' . $id), true);
 
 
         return view('rooms.index', [
@@ -56,7 +51,7 @@ class RoomController extends Controller
                 'rooms' => $rooms,
                 'buildings' => $buildings,
                 'selected_type' => $type,
-            'bill' => $bill,
+
         ]);
 
     }
@@ -70,11 +65,15 @@ class RoomController extends Controller
      */
     public function indexBuilding($id, $building_id)
     {
-        $types = Type::all();
-        $type = Type::find($id);
-        $buildings = Building::all();
-        $rooms = Room::get()->where('type_id', $type->id)->where('building_id', $building_id);
-        $building = Building::findOrFail($building_id);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $id),true);
+
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+
+        $rooms = json_decode(Http::get('http://localhost:9090//api/room/type_id/'.$type["id"].'/building_id/'.$building_id),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/'.$building_id),true);
+
         return view('rooms.index', [
             'types' => $types,
             'rooms' => $rooms,
@@ -94,11 +93,12 @@ class RoomController extends Controller
      */
     public function indexBuildingFloor($id, $building_id, $floor)
     {
-        $types = Type::all();
-        $type = Type::find($id);
-        $buildings = Building::all();
-        $rooms = Room::get()->where('type_id', $type->id)->where('building_id', $building_id)->where('floor', $floor);
-        $building = Building::find($building_id);
+        $types = Http::get('http://localhost:9090/api/types');
+        $type = Http::get('http://localhost:9090/api/type/' . $id);
+        $buildings = Http::get('http://localhost:9090/api/buildings');
+        $rooms = Http::get('http://localhost:9090//api/room/type_id/'.$type["id"].'/building_id/'.$building_id.'/floor'.$floor);
+        $building = Http::get('http://localhost:9090/api/building/'.$building_id);
+
         return view('rooms.index', [
             'types' => $types,
             'rooms' => $rooms,
@@ -170,9 +170,21 @@ class RoomController extends Controller
      */
     public function showStaff($id)
     {
-        $room = Room::findOrFail($id);
+//        $room = Room::findOrFail($id);
+        $response = Http::get('http://localhost:9090/api/room/' . $id);
+        $room = $response;
+        $response = Http::get('http://localhost:9090/api/type/' . $room["type_id"]);
+        $type = $response;
+        $response = Http::get('http://localhost:9090/api/building/' . $room["building_id"]);
+        $building = $response;
+        $response = Http::get('http://localhost:9090/api/user/' . $room["building_id"]);
+        $user = $response;
 
-        return view('rooms.showStaff',['room' => $room]);
+
+        return view('rooms.showStaff',[
+            'room' => $room,
+            'building'=> $building,
+            'type' => $type]);
     }
 
 
