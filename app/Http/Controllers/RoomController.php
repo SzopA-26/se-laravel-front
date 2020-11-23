@@ -66,11 +66,8 @@ class RoomController extends Controller
     public function indexBuilding($id, $building_id)
     {
         $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
-
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . $id),true);
-
         $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
-
         $rooms = json_decode(Http::get('http://localhost:9090//api/room/type_id/'.$type["id"].'/building_id/'.$building_id),true);
         $building = json_decode(Http::get('http://localhost:9090/api/building/'.$building_id),true);
 

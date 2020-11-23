@@ -26,12 +26,12 @@
                                 @foreach($buildings as $b)
                                     <option
                                         @isset($building)
-                                        @if($b->id == $building->id)
-                                        selected
+                                        @if($b["id"] == $building["id"])
+                                            selected
                                         @endif
                                         @endisset
-                                        value="{{ route('requests.index.building', ['type' => $selected_type->id, 'building' => $b->id]) }}">
-                                        ตึก {{ $b->name }}
+                                        value="{{ route('requests.index.building', ['type' => $selected_type["id"], 'building' => $b["id"]]) }}">
+                                        ตึก {{ $b["name"] }}
                                     </option>
                                 @endforeach
                             </select>

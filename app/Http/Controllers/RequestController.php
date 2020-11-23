@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class RequestController extends Controller
 {
@@ -22,10 +23,10 @@ class RequestController extends Controller
      */
     public function index()
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find(1);
-        $buildings = Building::all();
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . 1),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -42,10 +43,11 @@ class RequestController extends Controller
      */
     public function indexType($type_id)
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find($type_id);
-        $buildings = Building::all();
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -63,11 +65,11 @@ class RequestController extends Controller
      */
     public function indexBuilding($type_id, $building_id)
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find($type_id);
-        $buildings = Building::all();
-        $building = Building::findOrFail($building_id);
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $building_id),true);
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -87,11 +89,12 @@ class RequestController extends Controller
      */
     public function indexBuildingFloor($type_id, $building_id, $floor)
     {
-        $requests = BookingRequest::all();
-        $types = Type::all();
-        $type = Type::find($type_id);
-        $buildings = Building::all();
-        $building = Building::findOrFail($building_id);
+        $requests = json_decode(Http::get('http://localhost:9090/api/booking_requests'),true);
+        $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
+        $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $building_id),true);
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -110,7 +113,7 @@ class RequestController extends Controller
      */
     public function create($room)
     {
-        $room = Room::findOrFail($room);
+        $room = json_decode(Http::get('http://localhost:9090/api/room'.$room),true);
         return view('requests.create', [ 'room'  => $room ]);
 
     }
@@ -178,23 +181,6 @@ class RequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        $user_now = Auth::id();
-//        $request = BookingRequest::findOrFail($id);
-//        $room = Room::findOrFail($request->room_id);
-//        $request->admin_id = $user_now;
-//        $request->status = 'ยืนยันแล้ว';
-//        $request->save();
-//
-//
-//        $user = User::findOrFail($request->user_id);
-//        $user->room_id = $request->room_id;
-//        $user->checkIn_at = $request->checkIn_at;
-//        $user->save();
-//
-//
-//
-//        return redirect()->route('requests.index');
-
 
 
     }
