@@ -91,17 +91,17 @@
                         <div class="container">
                             <div class="row ">
                                 <p class="col-3"><i class="fas fa-check-circle" style="color: #1c7430"></i> เลขห้อง : {{ $room->number }}</p>
-                                <p class="col-3"><i class="fas fa-check-circle" style="color: #1c7430"></i> ประเภทห้อง : {{ $room->type->name }}</p>
-                                <p class="col-3"><i class="fas fa-users" style="font-size: 130%"></i> ความจุ : {{ $room->type->capacity }}</p>
+                                <p class="col-3"><i class="fas fa-check-circle" style="color: #1c7430"></i> ประเภทห้อง : {{ $type->name }}</p>
+                                <p class="col-3"><i class="fas fa-users" style="font-size: 130%"></i> ความจุ : {{ $type->capacity }}</p>
                             </div>
                             <hr>
                             <dl class="row" style="padding-top: 1rem; margin-left: 2rem">
 
                                 <dt class="col-sm-2"><i class="far fa-building"></i>&nbsp;&nbsp;&nbsp; ตึก </dt>
-                                <dd class="col-sm-9">{{ $room->building->name }}</dd>
+                                <dd class="col-sm-9">{{ $building->name }}</dd>
 
                                 <dt class="col-sm-2"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;&nbsp; ที่อยู่ </dt>
-                                <dd class="col-sm-9 "> {{ $room->building->address }}</dd>
+                                <dd class="col-sm-9 "> {{ $building->address }}</dd>
 
                                 <dt class="col-sm-2"><i class="fas fa-wifi"></i>&nbsp;&nbsp; Wifi Code </dt>
                                 <dd class="col-sm-9">
@@ -121,7 +121,7 @@
                         <div class="card-header" style="margin-bottom: 20px">
                             <h5 class="text-lg-center" style="padding-top: 1rem">ข้อมูลผู้เช่า</h5>
                         </div>
-                        @foreach($room->users as $user)
+                        @foreach($users as $user)
                         <div class="card margbot">
                             <div class="row">
                                 <div class="col-md-10">
