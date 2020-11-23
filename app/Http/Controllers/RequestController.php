@@ -72,6 +72,7 @@ class RequestController extends Controller
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . $type_id),true);
         $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
         $building = json_decode(Http::get('http://localhost:9090/api/building/' . $building_id),true);
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -116,7 +117,6 @@ class RequestController extends Controller
     public function create($room)
     {
         $room = json_decode(Http::get('http://localhost:9090/api/room/'.$room),true);
-        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
         $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
 
@@ -124,8 +124,8 @@ class RequestController extends Controller
         return view('requests.create', [
             'building'=> $building,
             'room' => $room,
-            'type'=> $type,
-            'building'=> $building]);
+            'type'=> $type
+            ]);
 
     }
 
@@ -141,10 +141,13 @@ class RequestController extends Controller
             'checkin_date' => ['required', 'date', 'after:today']
         ]);
 
+//        $response = Http::asForm()->put()
+
         $req = new BookingRequest;
         $req->user_id = $request->input('user_id');
         $req->room_id = $request->input('room_id');
         $req->checkIn_at = $request->input('checkin_date');
+
 
         $room = Room::findOrFail($request->input('room_id'));
         $room->available = 'no';
@@ -156,6 +159,8 @@ class RequestController extends Controller
         $user->save();
 
         $req->save();
+
+
         return redirect()->route('home.index');
     }
 
