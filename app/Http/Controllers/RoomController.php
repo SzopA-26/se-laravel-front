@@ -185,30 +185,42 @@ class RoomController extends Controller
      */
     public function userRoom($id)
     {
-        $room = Room::findOrFail($id);
-        $today =Carbon::today();
-        $bill = Bill::where( 'activated_at', '<=', $today)->where('status','รอชำระ')->where('room_id','=',$room->id)->count();
-
+        // $room = Room::findOrFail($id);
+        $room = Http::get('http://localhost:9090/api/room/' . $id);
+        $room = json_decode($room);
+        $users = Http::get('http://localhost:9090/api/users/room_id/' . $room->id);
+        $type = Http::get('http://localhost:9090/api/type/' . $room->type_id);
+        $building = Http::get('http://localhost:9090/api/building/' . $room->building_id);
+        $today =Carbon::today()->toDateString();
+        // $bill = Bill::where( 'activated_at', '<=', $today)->where('status','รอชำระ')->where('room_id','=',$room["id"])->count();
+        $bill = Http::get('http://localhost:9090/api/bill/room_id/' . $id .'/activated_at/' . $today . '/status/' . 1);
 
         $request = BookingRequest::get()->where('room_id', $id)->where('deleted_at', null)->first();
         if(!$request) {
             return redirect()->route('home.index');
         }
 
-        $n_packages = Package::where('room_id',$id)->where('status','รอรับของ')->count();
-        $wifi_code = WifiCode::where('user_id',Auth::id())->first();
+        // $n_packages = Package::where('room_id',$id)->where('status','รอรับของ')->count();
+        $n_packages = Http::get('http://localhost:9090/api/packages/room_id/' . $id . '/status/' . 1);
+
+
+        // $wifi_code = WifiCode::where('user_id',Auth::id())->first();
+        $wifi_code = Http::get('http://localhost:9090/api/wifi_codes/user_id/' . Auth::id());
 
         //update wifi
-        if ($wifi_code != null) {
+        if (count(json_decode($wifi_code)) != 0) {
+            $wifi_code = Http::get('http://localhost:9090/api/wifi_codes/user_id/' . Auth::id())[0];
             $expiredate = Carbon::create($wifi_code->expire_at);
             $today = Carbon::today();
             if ($today->gte($expiredate)) {
-                $wifi_code->delete();
+                // $wifi_code->delete();
+                Http::delete('http://localhost:9090/api/wifi_code/' . $wifi_code->id);
             }
         }
-        $wifi_code = WifiCode::where('user_id',Auth::id())->first();
+        // $wifi_code = WifiCode::where('user_id',Auth::id())->first();
+        $wifi_code = Http::get('http://localhost:9090/api/wifi_codes/user_id/' . Auth::id());
 
-        return view('rooms.myRoom',['room' => $room, 'c' => $n_packages,'wifi_code' => $wifi_code, 'request' => $request,'bill'=>$bill]);
+        return view('rooms.myRoom',['room' => $room, 'c' => $n_packages,'wifi_code' => json_decode($wifi_code),'request' => $request,'bill'=> json_decode($bill), 'type' => json_decode($type), 'building' => json_decode($building), 'users' => json_decode($users)]);
     }
 
     public function roomPackages($id){
