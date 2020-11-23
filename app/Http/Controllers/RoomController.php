@@ -48,9 +48,6 @@ class RoomController extends Controller
             ->where('activated_at','<=','รอชำระ');
 
 
-
-
-
         return view('rooms.index', [
                 'types' => $types,
                 'rooms' => $rooms,
