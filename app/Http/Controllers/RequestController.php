@@ -141,25 +141,42 @@ class RequestController extends Controller
             'checkin_date' => ['required', 'date', 'after:today']
         ]);
 
-//        $response = Http::asForm()->put()
-
-        $req = new BookingRequest;
-        $req->user_id = $request->input('user_id');
-        $req->room_id = $request->input('room_id');
-        $req->checkIn_at = $request->input('checkin_date');
 
 
-        $room = Room::findOrFail($request->input('room_id'));
-        $room->available = 'no';
-        $room->save();
+        $response_req = Http::asForm()->post('http://localhost:9090/api/booking_requests',[
+            'user_id' => $request->input('user_id'),
+            'room_id' => $request->input('room_id'),
+            'checkIn_at' => $request->input('checkin_date'),
+            'admin_id' => Auth::id(),
+            'status' => 'รอการยืนยัน',
+            'created_at' => Carbon::now()->toDateString()
 
-        $user = User::findOrFail($request->input('user_id'));
-        $user->room_id = $req->room_id;
-        $user->checkIn_at = $req->checkIn_at;
-        $user->save();
 
-        $req->save();
+        ]);
+        $room = json_decode(Http::get('http://localhost:9090/api/room/'.$request->input('room_id')),true);
+        $response_room = Http::asForm()->put('http://localhost:9090/api/room',[
+            'available' => 'no',
+            'id' => $request->input('room_id'),
+        ]);
 
+        $user = json_decode(Http::get('http://localhost:9090/api/user/'.$request->input('user_id')),true);
+        $response_user = Http::asForm()->put('http://localhost:9090/api/users',[
+            'room_id' => $request->input('room_id'),
+            'checkIn_at' => $request->input('checkin_date'),
+            'id' => $request->input('user_id'),
+            'title' => $user['title'],
+            'first_name' => $user['first_name'],
+            'last_name' => $user["last_name"],
+            'email' => $user["email"],
+            'birth_date' => Carbon::parse($user["birth_date"])->toDateString(),
+            'citizen_id' => $user["citizen_id"],
+            'address' => $user["address"],
+            'phone_number_1' => $user["phone_number_1"],
+            'phone_number_2' => $user["phone_number_2"],
+            'money' => $user["money"],
+            'invited' => $user["invited"],
+            'img' => $user["img"]
+        ]);
 
         return redirect()->route('home.index');
     }
