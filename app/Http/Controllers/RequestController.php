@@ -27,13 +27,15 @@ class RequestController extends Controller
         $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . 1),true);
         $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+        $rooms = json_decode(Http::get('http://localhost:9090/api/rooms'), true);
 
 
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
             'selected_type' => $type,
-            'requests' => $requests
+            'requests' => $requests,
+            'rooms' => $rooms
         ]);
     }
 
@@ -190,17 +192,17 @@ class RequestController extends Controller
     public function show($id)
     {
         $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id),true);
-        $user = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $request["id"]),true);
+        $users = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $request["room_id"]),true);
         $room = json_decode(Http::get('http://localhost:9090/api/room/' . $request["room_id"]),true);
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
 
         $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
 
-
+//        dd($users[0]);
 
         return view('requests.show', [
             'request' => $request,
-            'user'=> $user,
+            'user'=> $users[0],
             'building'=> $building,
             'room' => $room,
             'type'=> $type]);
@@ -232,22 +234,27 @@ class RequestController extends Controller
     }
 
     public function updateConfirm($id) {
-        $req = BookingRequest::findOrFail($id);
-        $req->status = 'รอการชำระเงิน';
-        $req->admin_id = Auth::user()->id;
-        $req->save();
+        $req = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id));
+        $user = json_decode(Http::get('http://localhost:9090/api/user/'.$req->user_id));
+        $room = json_decode(Http::get('http://localhost:9090/api/room/'.$req->room_id));
+        $type = json_decode(Http::get('http://localhost:9090/api/type/'.$room->type_id));
+        $res = Http::put('http://localhost:9090/api/booking_requests', [
+            'id' => $id,
+            'status' => 'รอการชำระเงิน',
+            'admin_id' => Auth::user()->id
+        ]);
 
         $bill = new Bill();
         $bill->room_id = $req->room_id;
         $bill->user_id = Auth::id();
         $bill->water_unit = 0;
         $bill->electric_unit = 0;
-        $bill->room_price = $req->room->type->price;
-        $bill->total_price = ($req->room->type->price) * 2;
+        $bill->room_price = $type->price;
+        $bill->total_price = ($type->price) * 2;
         $bill->status = 'รอชำระ';
-        $bill->activated_at = $req->user->checkIn_at;
+        $bill->activated_at = $user->checkIn_at;
 
-        $bill->save();
+        $res = Http::post('http://localhost:9090/api/bill', $bill->toArray());
 
         return redirect()->route('requests.index');
     }
@@ -260,18 +267,21 @@ class RequestController extends Controller
      */
     public function destroy($id)
     {
-        $req = BookingRequest::findOrFail($id);
+        $req = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id));
 
-        $user = User::findOrFail($req->user_id);
-        $user->room_id = null;
-        $user->checkIn_at = null;
-        $user->save();
+        Http::put('http://localhost:9090/api/user/checkIn_at',[
+            'room_id' => null,
+            'checkIn_at' => null,
+            'id' => $req->user_id
+        ]);
 
-        $room = Room::findOrFail($req->room_id);
-        $room->available = 'yes';
-        $room->save();
+        Http::put('http://localhost:9090/api/room', [
+            'available' => 'yes',
+            'id' => $req->id
+        ]);
 
-        $req->delete();
+        $res = Http::delete('http://localhost:9090/api/booking_request/'.$id);
+//        return $res;
         return redirect()->route('requests.index');
     }
 }
