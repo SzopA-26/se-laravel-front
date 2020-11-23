@@ -27,6 +27,8 @@ class RequestController extends Controller
         $types = json_decode(Http::get('http://localhost:9090/api/types'),true);
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . 1),true);
         $buildings = json_decode(Http::get('http://localhost:9090/api/buildings'),true);
+
+
         return view('requests.index', [
             'types' => $types,
             'buildings' => $buildings,
@@ -113,8 +115,17 @@ class RequestController extends Controller
      */
     public function create($room)
     {
-        $room = json_decode(Http::get('http://localhost:9090/api/room'.$room),true);
-        return view('requests.create', [ 'room'  => $room ]);
+        $room = json_decode(Http::get('http://localhost:9090/api/room/'.$room),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
+
+
+        return view('requests.create', [
+            'building'=> $building,
+            'room' => $room,
+            'type'=> $type,
+            'building'=> $building]);
 
     }
 
@@ -156,8 +167,21 @@ class RequestController extends Controller
      */
     public function show($id)
     {
-        $request = BookingRequest::findOrFail($id);
-        return view('requests.show', ['request' => $request]);
+        $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id),true);
+        $user = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $request["id"]),true);
+        $room = json_decode(Http::get('http://localhost:9090/api/room/' . $request["room_id"]),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
+
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
+
+
+
+        return view('requests.show', [
+            'request' => $request,
+            'user'=> $user,
+            'building'=> $building,
+            'room' => $room,
+            'type'=> $type]);
 
     }
 

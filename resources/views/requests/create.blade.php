@@ -65,7 +65,7 @@
                                 </dd>
 
                                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                <input type="hidden" name="room_id" value="{{ $room->id }}" }}>
+                                <input type="hidden" name="room_id" value="{{ $room["id"] }}" }}>
 
                             </dl>
                         </div>
@@ -74,36 +74,36 @@
                         <div  class="container m-md-3" style="padding-top: 2rem">
                             <dl class="row">
                                 <dt class="col-sm-2 text-right">ที่อยู่ :</dt>
-                                <dd class="col-sm-9">{{ $room->building->address }}</dd>
+                                <dd class="col-sm-9">{{ $building["address"] }}</dd>
 
                                 <dt class="col-sm-2 text-right">ตึก :</dt>
-                                <dd class="col-sm-9">{{ $room->building->name }}</dd>
+                                <dd class="col-sm-9">{{ $building["name"] }}</dd>
 
                                 <dt class="col-sm-2 text-right">ชั้น :</dt>
-                                <dd class="col-sm-9">{{ $room->floor }}</dd>
+                                <dd class="col-sm-9">{{ $room["floor"] }}</dd>
 
                                 <dt class="col-sm-2 text-right">เลขห้อง :</dt>
-                                <dd class="col-sm-9">{{ $room->number }}</dd>
+                                <dd class="col-sm-9">{{ $room["number"] }}</dd>
 
                                 <dt class="col-sm-2 text-right">แบบห้อง :</dt>
-                                <dd class="col-sm-9">{{ $room->type->name }}</dd>
+                                <dd class="col-sm-9">{{ $type["name"] }}</dd>
 
                                 <dt class="col-sm-2 text-right">ขนาด :</dt>
-                                <dd class="col-sm-9">{{ $room->type->size }} ตร.ม.</dd>
+                                <dd class="col-sm-9">{{ $type["size"] }} ตร.ม.</dd>
 
                                 <dt class="col-sm-2 text-right">เฟอร์นิเจอร์ :</dt>
                                 <dd class="col-sm-9">เตียงคู่ ตู้เย็น ทีวี โต๊ะ เก้าอี้ ตู้เสื้อผ้า</dd>
 
                                 <dt class="col-sm-2 text-right">ราคามัดจำ :</dt>
-                                <dd class="col-sm-9">{{ $room->type->price }} บาท</dd>
+                                <dd class="col-sm-9">{{ $type["price"] }} บาท</dd>
 
                                 <dt class="col-sm-2 text-right">ราคาเช่าล่วงหน้า :</dt>
-                                <dd class="col-sm-9">{{ $room->type->price }} บาท</dd>
+                                <dd class="col-sm-9">{{ $type["price"] }} บาท</dd>
 
                                 <dt class="col-sm-2 text-right">ค่าน้ำ :</dt>
-                                <dd class="col-sm-9">{{ $room->building->water_rate }} บาทต่อยูนิต</dd>
+                                <dd class="col-sm-9">{{ $building["water_rate"] }} บาทต่อยูนิต</dd>
                                 <dt class="col-sm-2 text-right">ค่าไฟ :</dt>
-                                <dd class="col-sm-9">{{ $room->building->electric_rate }} บาทต่อยูนิต</dd>
+                                <dd class="col-sm-9">{{ $building["electric_rate"] }} บาทต่อยูนิต</dd>
 
                                 <dt class="col-sm-2 text-right">สัญญา :</dt>
                                 <dd class="col-sm-9">1 ปี</dd>
