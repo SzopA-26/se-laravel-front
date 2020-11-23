@@ -94,7 +94,7 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">รายเดือน</th>
-                                            <td>{{ $type->["price"] }}  บาท</td>
+                                            <td>{{ $type["price"] }}  บาท</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ค่าไฟ</th>
@@ -118,26 +118,26 @@
 
         </div>
         <div class="row">
-        @if($room->users->count() > 0)
-            @foreach($room->users as $user)
+        @if($users)
+            @foreach($users as $user)
                     <div class="col-4">
                         <div style="padding-top: 1rem">
                             <div class="card text-dark border-primary">
                                 <div class="card-body">
                                     <div>
-                                        <label >ชื่อ : {{ $user->title }} {{ $user->first_name }} {{ $user->last_name }}</label>
+                                        <label >ชื่อ : {{ $user["title"] }} {{ $user["first_name"] }} {{ $user["last_name"] }}</label>
                                     </div>
                                     <div>
                                         <label >ที่อยู่ :</label>
-                                        <label > {{ $user->address }}</label>
+                                        <label > {{ $user["address"] }}</label>
                                     </div>
                                     <div>
                                         <label >Email :</label>
-                                        <label >{{ $user->email }}</label>
+                                        <label >{{ $user["email"] }}</label>
                                     </div>
                                     <div>
                                         <label >เบอร์ติดต่อ :</label>
-                                        <label >{{ $user->phone_number_1 }}</label>
+                                        <label >{{ $user["phone_number_1"] }}</label>
                                     </div>
                                 </div>
                             </div>

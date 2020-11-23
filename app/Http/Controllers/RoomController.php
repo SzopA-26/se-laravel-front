@@ -145,14 +145,10 @@ class RoomController extends Controller
 //        $room_images = DB::table('room_images')->select('*')->where('room_id',$room->id)->get();
 //        dd($room_images);
 
-        $response = Http::get('http://localhost:9090/api/room/' . $id);
-        $room = $response;
-        $response = Http::get('http://localhost:9090/api/type/' . $room["type_id"]);
-        $type = $response;
-        $response = Http::get('http://localhost:9090/api/building/' . $room["building_id"]);
-        $building = $response;
-        $response = Http::get('http://localhost:9090/api/room_image/room_id/' . $id);
-        $room_images = $response;
+        $room = Http::get('http://localhost:9090/api/room/' . $id);
+        $type = Http::get('http://localhost:9090/api/type/' . $room["type_id"]);
+        $building = Http::get('http://localhost:9090/api/building/' . $room["building_id"]);
+        $room_images = Http::get('http://localhost:9090/api/room_image/room_id/' . $id);
 
         return view('rooms.show',[
             'room' => $room,
@@ -170,21 +166,20 @@ class RoomController extends Controller
      */
     public function showStaff($id)
     {
-//        $room = Room::findOrFail($id);
-        $response = Http::get('http://localhost:9090/api/room/' . $id);
-        $room = $response;
-        $response = Http::get('http://localhost:9090/api/type/' . $room["type_id"]);
-        $type = $response;
-        $response = Http::get('http://localhost:9090/api/building/' . $room["building_id"]);
-        $building = $response;
-        $response = Http::get('http://localhost:9090/api/user/' . $room["building_id"]);
-        $user = $response;
+//        $room = Room::findOrFail($id);*
+        $room = json_decode(Http::get('http://localhost:9090/api/room/' . $id),true);
+        $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
+
+        $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
+        $users = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $room["id"]),true);
 
 
         return view('rooms.showStaff',[
             'room' => $room,
             'building'=> $building,
-            'type' => $type]);
+            'type' => $type,
+            'users'=> $users
+        ]);
     }
 
 
