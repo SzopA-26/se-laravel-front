@@ -77,9 +77,11 @@ class User extends Authenticatable
     }
 
     public function haveWifi($id){
-        $user = User::findOrFail($id);
-        $wifi = $user->wifiCodes;
-        return ($wifi->count() != 0);
+        // $user = User::findOrFail($id);
+        $user = json_decode(Http::get('http://localhost:9090/api/user/' . $id));
+        // $wifi = $user->wifiCodes;
+        $wifi = json_decode(Http::get('http://localhost:9090/api/wifi_codes/user_id/' . $user->id));
+        return (count($wifi) != 0);
     }
 
     public function isUpdateInfo() {
