@@ -149,7 +149,7 @@ class RequestController extends Controller
             'user_id' => $request->input('user_id'),
             'room_id' => $request->input('room_id'),
             'checkIn_at' => $request->input('checkin_date'),
-            'admin_id' => Auth::id(),
+//            'admin_id' => Auth::id(),
             'status' => 'รอการยืนยัน',
             'created_at' => Carbon::now()->toDateString()
 
@@ -191,7 +191,8 @@ class RequestController extends Controller
      */
     public function show($id)
     {
-        $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id),true);
+        $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id));
+        dd($request);
         $users = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $request["room_id"]),true);
         $room = json_decode(Http::get('http://localhost:9090/api/room/' . $request["room_id"]),true);
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
