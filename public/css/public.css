@@ -1,0 +1,15 @@
+ิbody {
+    background-color: #1d1d1d;
+}
+
+.navbar {
+    background-color: #f1c890 !important;
+}
+
+a.nav-link, a.navbar-brand {
+    color: #051c24 !important;
+}
+
+a.nav-link:hover, a.navbar-brand:hover {
+    color: #c93535 !important;
+}
