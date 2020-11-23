@@ -18,7 +18,7 @@
     <div class="container justify-content-center">
         <div class="card" style="height: 40rem;">
             <div class="card-header">
-             <h3 class="text-center"> ดูห้องทั้งหมด </h3>
+             <h3 class="text-center"> ดูห้องทั้งหมด {{ $selected_type["id"] }} </h3>
             </div>
             <div class="card-header">
                 <div class="form-row" style="padding-top: 1rem">
@@ -30,12 +30,12 @@
                                 @foreach($buildings as $b)
                                     <option
                                         @isset($building)
-                                            @if($b->id == $building->id)
+                                            @if($b["id"] == $building["id"])
                                                 selected
                                             @endif
                                         @endisset
-                                        value="{{ route('rooms.index.building', ['type' => $selected_type->id, 'building' => $b->id]) }}">
-                                        ตึก {{ $b->name }}
+                                        value="{{ route('rooms.index.building', ['type' => $selected_type["id"], 'building' => $b["id"]]) }}">
+                                        ตึก {{ $b["name"] }}
                                     </option>
                                 @endforeach
                             </select>
@@ -49,28 +49,28 @@
                             >
                                 <option selected disabled>เลือกชั้น </option>
                                 @isset($building)
-                                @for($i=1; $i <= $building->total_floor; $i++)
+                                @for($i=1; $i <= $building["total_floor"]; $i++)
                                     <option
                                         @isset($selected_floor)
                                             @if($i == $selected_floor)
                                             selected
                                             @endif
                                         @endisset
-                                        value="{{ route('rooms.index.building.floor', ['type' => $selected_type->id, 'building' => $building->id, 'floor' => $i]) }}"
+                                        value="{{ route('rooms.index.building.floor', ['type' => $selected_type["id"], 'building' => $building["id"], 'floor' => $i]) }}"
                                     >ชั้น {{ $i }}</option>
                                 @endfor
                                 @endisset
                             </select>
                         </div>
                         <div class="col-md-4" style="padding-top: 2rem">
-                            <a type="button" class="btn btn-outline-primary" href="{{ route('rooms.index', ['type' => $selected_type]) }}">ล้าง</a>
+                            <a type="button" class="btn btn-outline-primary" href="{{ route('rooms.index', ['type' => $selected_type["id"]]) }}">ล้าง</a>
                         </div>
                         @foreach($types as $type)
                             <a class="btn btn-outline-primary type-button
-                           @if($type->id == $selected_type->id)
+                           @if($type["id"] == $selected_type["id"])
                                 active
                             @endif
-                                " href="{{ route('rooms.index' ,[ 'type' => $type->id ]) }}" style="margin-top: 10px">{{ $type->name }}</a>
+                                " href="{{ route('rooms.index' ,[ 'type' => $type["id"] ]) }}" style="margin-top: 10px">{{ $type["name"] }}</a>
                         @endforeach
 
                     </div>
@@ -96,28 +96,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach($rooms->sortBy('name')->sortBy('number') as $room)
+                        @foreach($rooms as $room)
                             @if(auth()->check())
-                                @if(auth()->user()->role == 'user' && $room->available == 'no')
+                                @if(auth()->user()->role == 'user' && $room["available"] == 'no')
                                     @continue
                                 @endif
                                 <tr>
-                                    <td>{{ $room->building->name }}</td>
-                                    <td>{{ $room->floor }}</td>
-                                    <td>{{ $room->number }}</td>
-                                    <td>{{ $room->type->size }}</td>
-                                    <td>{{ $room->type->name }}</td>
+                                    @foreach($buildings as $building)
+                                        @if($building["id"] == $room["building_id"])
+                                            <td>{{ $building["name"] }}</td>
+                                        @endif
+                                    @endforeach
+                                    <td>{{ $room["floor"] }}</td>
+                                    <td>{{ $room["number"] }}</td>
+                                    <td>{{ $type["size"] }}</td>
+                                    <td>{{ $type["name"] }}</td>
                                     @if(auth()->user()->isAdmin())
                                         <td
-                                        @if($room->available == 'yes')
+                                        @if($room["available"] == 'yes')
                                             style="color: green"
                                         @else
                                             style="color: red"
                                         @endif
-                                        >{{ $room->available }}</td>
-                                        <td><a href="{{ route("rooms.show.staff", ['id' => $room->id]) }}"><button type="button" class="btn btn-outline-primary">แสดง</button></a></td>
+                                        >{{ $room["available"] }}</td>
+                                        <td><a href="{{ route("rooms.show.staff", ['id' => $room["id"]]) }}"><button type="button" class="btn btn-outline-primary">แสดง</button></a></td>
                                     @else
-                                        <td><a href="{{ route("rooms.show",['room' => $room->id]) }}"><button type="button" class="btn btn-outline-success">แสดง</button></a></td>
+                                        <td><a href="{{ route("rooms.show",['room' => $room["id"]]) }}"><button type="button" class="btn btn-outline-success">แสดง</button></a></td>
                                     @endif
                                 </tr>
                             @endif

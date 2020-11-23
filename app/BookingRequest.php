@@ -21,4 +21,6 @@ class BookingRequest extends Model
     }
 
 
+
+
 }

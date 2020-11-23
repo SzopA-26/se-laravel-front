@@ -36,7 +36,7 @@
     <div class="container ">
         <div class="card bg-secondary" >
             <div class="card-header text-white">
-                <h1> ตึก {{ $room->building->name }} ชั้น {{ $room->floor }} ห้อง {{ $room->number }}</h1>
+                <h1> ตึก {{ $building["name"] }} ชั้น {{ $room["floor"] }} ห้อง {{ $room["number"] }}</h1>
             </div>
             <div class="card-body">
                 <div class="container py-2">
@@ -49,11 +49,11 @@
                                 <!-- main slider carousel items -->
 
                                 <div class="carousel-inner">
-                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)
-                                    <div class="{{ $loop->first ? 'active' : '' }} carousel-item" data-slide-number="{{ $loop->index }}">
-                                        <img src="{{ $roomImage->image_path }}" class="img-fluid">
-                                    </div>
-                                    @endforeach
+{{--                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)--}}
+{{--                                    <div class="{{ $loop->first ? 'active' : '' }} carousel-item" data-slide-number="{{ $loop->index }}">--}}
+{{--                                        <img src="{{ $roomImage->image_path }}" class="img-fluid">--}}
+{{--                                    </div>--}}
+{{--                                    @endforeach--}}
                                     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="sr-only">Previous</span>
@@ -66,13 +66,13 @@
                                 <!-- main slider carousel nav controls -->
 
                                 <ul class="carousel-indicators list-inline mx-auto border px-2">
-                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)
-                                    <li class="list-inline-item active">
-                                        <a id="carousel-selector-0" class="selected" data-slide-to="{{ $loop->index }}" data-target="#myCarousel">
-                                            <img src="{{ $roomImage->image_path }}" class="img-fluid">
-                                        </a>
-                                    </li>
-                                    @endforeach
+{{--                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)--}}
+{{--                                    <li class="list-inline-item active">--}}
+{{--                                        <a id="carousel-selector-0" class="selected" data-slide-to="{{ $loop->index }}" data-target="#myCarousel">--}}
+{{--                                            <img src="{{ $roomImage->image_path }}" class="img-fluid">--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
+{{--                                    @endforeach--}}
                                 </ul>
                             </div>
                         </div>
@@ -86,23 +86,23 @@
                                         <tbody>
                                         <tr>
                                             <th scope="row">ห้องประเภท</th>
-                                            <td> {{ $room->type->name }}</td>
+                                            <td> {{ $type["name"] }}</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ขนาด</th>
-                                            <td>{{ $room->type->size }} ตร.ม</td>
+                                            <td>{{ $type["size"] }} ตร.ม</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">รายเดือน</th>
-                                            <td>{{ $room->type->price }}  บาท</td>
+                                            <td>{{ $type["price"] }}  บาท</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ค่าไฟ</th>
-                                            <td>{{ $room->building->electric_rate }}  บาทต่อยูนิต</td>
+                                            <td>{{ $building["electric_rate"] }}  บาทต่อยูนิต</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">ค่าน้ำ</th>
-                                            <td>{{ $room->building->water_rate }}  บาทต่อยูนิต</td>
+                                            <td>{{ $building["water_rate"] }}  บาทต่อยูนิต</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -118,26 +118,26 @@
 
         </div>
         <div class="row">
-        @if($room->users->count() > 0)
-            @foreach($room->users as $user)
+        @if($users)
+            @foreach($users as $user)
                     <div class="col-4">
                         <div style="padding-top: 1rem">
                             <div class="card text-dark border-primary">
                                 <div class="card-body">
                                     <div>
-                                        <label >ชื่อ : {{ $user->title }} {{ $user->first_name }} {{ $user->last_name }}</label>
+                                        <label >ชื่อ : {{ $user["title"] }} {{ $user["first_name"] }} {{ $user["last_name"] }}</label>
                                     </div>
                                     <div>
                                         <label >ที่อยู่ :</label>
-                                        <label > {{ $user->address }}</label>
+                                        <label > {{ $user["address"] }}</label>
                                     </div>
                                     <div>
                                         <label >Email :</label>
-                                        <label >{{ $user->email }}</label>
+                                        <label >{{ $user["email"] }}</label>
                                     </div>
                                     <div>
                                         <label >เบอร์ติดต่อ :</label>
-                                        <label >{{ $user->phone_number_1 }}</label>
+                                        <label >{{ $user["phone_number_1"] }}</label>
                                     </div>
                                 </div>
                             </div>

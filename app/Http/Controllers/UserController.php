@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,6 +15,8 @@ class UserController extends Controller
 {
     public function addRoommateView($id,$result=null){
         $room = Room::findOrFail($id);
+        $response = Http::get('http://localhost:9090/api/room/' . $id);
+        $room = $response;
         return view('rooms.addRoommate',['room' => $room,'result'=>$result]);
     }
 
