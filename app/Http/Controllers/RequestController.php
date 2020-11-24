@@ -191,8 +191,8 @@ class RequestController extends Controller
      */
     public function show($id)
     {
-        $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id));
-        dd($request);
+        $request = json_decode(Http::get('http://localhost:9090/api/booking_request/'.$id), true);
+//        dd($request);
         $users = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $request["room_id"]),true);
         $room = json_decode(Http::get('http://localhost:9090/api/room/' . $request["room_id"]),true);
         $type = json_decode(Http::get('http://localhost:9090/api/type/' . $room["type_id"]),true);
