@@ -253,7 +253,7 @@ class RequestController extends Controller
         $bill->room_price = $type->price;
         $bill->total_price = ($type->price) * 2;
         $bill->status = 'รอชำระ';
-        $bill->activated_at = $user->checkIn_at;
+        $bill->activated_at = Carbon::parse($user->checkIn_at)->toDateString();
 
         $res = Http::post('http://localhost:9090/api/bill', $bill->toArray());
 

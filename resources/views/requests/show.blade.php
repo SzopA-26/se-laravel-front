@@ -105,6 +105,7 @@
 
                             </dl>
                         </div>
+                        @if($request['status'] == 'รอการยืนยัน')
                         <div class="text-center">
                             <form id="deleteForm" onsubmit="return confirm('ต้องการลบคำขอนี้หรือไม่')"
                                   action="{{ route('requests.destroy', ['request' => $request["id"]]) }}" method="post">
@@ -135,7 +136,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        @endif
 
                     </form>
                 </div>

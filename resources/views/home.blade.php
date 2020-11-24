@@ -21,7 +21,7 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://www.home.co.th/images/img_v/img_Directory/20170417-144928007-D-Mark-Condo.jpg"
+                <img src="{{asset('/images/home1.jpg')}}"
                      class="d-block w-100" alt="1" height="500">
             </div>
             <div class="carousel-item">
