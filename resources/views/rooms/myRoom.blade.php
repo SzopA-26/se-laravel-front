@@ -108,7 +108,7 @@
                                     @if(count($wifi_code) != 0)
                                         <div class="row">
                                             <p class="wifi ">{{ $wifi_code[0]->code }}</p>
-                                            <p style="margin-left: 30px">(หมดอายุวันที่ {{ $wifi_code[0]->expire_at }})</p>
+                                            <p style="margin-left: 30px">(หมดอายุวันที่ {{ \Carbon\Carbon::parse($wifi_code[0]->expire_at)->toDateString() }})</p>
                                         </div>
                                     @else
                                         ไม่มี wifi package
@@ -189,7 +189,7 @@
                                 <li class="list-group-item"><i class="fas fa-file-invoice-dollar bill-sign"></i>&nbsp;&nbsp;&nbsp;<a href="" class="text disabled">ยังไม่มีบิล</a></li>
                             @endif
                             <li class="list-group-item"><i class="fas fa-history"></i>&nbsp;&nbsp;&nbsp;<a href="{{ route('rooms.show.billHistory',['id' => $room->id,'bill'=> \App\Bill::all()->where('status','ชำระแล้ว')->where('room_id',$room->id)->first()]) }}" class="text">ดูประวัติการจ่ายบิล</a></li>
-                            <li class="list-group-item"><i class="fas fa-box-open package-sign"></i>&nbsp;&nbsp;<a class="text" href="{{ route('room.users.packages',['id' => $room->id]) }}">ตรวจสอบพัสดุ</a><span class="badge badge-danger">{{ $c }}</span></li>
+                            <li class="list-group-item"><i class="fas fa-box-open package-sign"></i>&nbsp;&nbsp;<a class="text" href="{{ route('room.users.packages',['id' => $room->id]) }}">ตรวจสอบพัสดุ</a><span class="badge badge-danger">{{ count($c) }}</span></li>
                             <li class="list-group-item"><i class="fas fa-wifi wifi-sign"></i>&nbsp;&nbsp;&nbsp;<a class="text" href="{{ route('room.user.wifi', ['room' => $room->id]) }}">ซื้อ wifi package</a></li>
                             <li class="list-group-item"><i class="fas fa-receipt" style="font-size: 120%"></i>&nbsp;&nbsp;&nbsp;<a class="text" href="{{ route('room.user.statement',['room' => $room->id]) }}">ประวัติการชำระเงินของฉัน</a></li>
                             <li class="list-group-item"><i class="fas fa-user-friends colla-sign"></i>&nbsp;&nbsp;&nbsp;<a class="text" href="{{ route('room.user.roommate',['room' => $room->id]) }}">เพิ่มผู้อยู่อาศัย</a></li>

@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public function addRoommateView($id,$result=null){
-        $room = Room::findOrFail($id);
         $response = Http::get('http://localhost:9090/api/room/' . $id);
-        $room = $response;
-        return view('rooms.addRoommate',['room' => $room,'result'=>$result]);
+        $room = json_decode($response);
+        $response = Http::get('http://localhost:9090/api/users/room_id/' . $id);
+        $users = json_decode($response);
+        $response = Http::get('http://localhost:9090/api/type/' . $room->type_id);
+        $type = json_decode($response);
+        return view('rooms.addRoommate',['room' => $room,'result'=>$result, 'users' => $users, 'type' => $type]);
     }
 
     public function sendInvite($id,Request $request)

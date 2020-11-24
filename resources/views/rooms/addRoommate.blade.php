@@ -180,11 +180,11 @@
                     @csrf
                     <div class="mb-3">
                         <label for="validationDefault01">Email</label>
-                        <input type="text" class="form-control" id="validationDefault01" name="email" required @if($room->users->count() >= $room->type->capacity) disabled @endif>
+                        <input type="text" class="form-control" id="validationDefault01" name="email" required @if(count($users) >= $type->capacity) disabled @endif>
                     </div>
-                    @if($room->users->count() >= $room->type->capacity)
+                    @if(count($users) >= $type->capacity)
                         <div style="margin: 30px;color: darkred">
-                            จำนวนสมาชิกในห้องของคุณเต็มแล้ว ({{ $room->type->capacity }} คน) ไม่สามารถเพิ่มได้หากมีสมาชิกย้ายออกโปรดติดต่อนิติบุคคล
+                            จำนวนสมาชิกในห้องของคุณเต็มแล้ว ({{ $type->capacity }} คน) ไม่สามารถเพิ่มได้หากมีสมาชิกย้ายออกโปรดติดต่อนิติบุคคล
                         </div>
                         @else
                     <button type="submit" class="btn btn-outline-success">Invite</button>

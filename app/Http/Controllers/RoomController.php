@@ -206,7 +206,7 @@ class RoomController extends Controller
 
         // $n_packages = Package::where('room_id',$id)->where('status','รอรับของ')->count();
         $n_packages = Http::get('http://localhost:9090/api/packages/room_id/' . $id . '/status/' . 1);
-
+        $n_packages = json_decode($n_packages);
 
         // $wifi_code = WifiCode::where('user_id',Auth::id())->first();
         $wifi_code = Http::get('http://localhost:9090/api/wifi_codes/user_id/' . Auth::id());
