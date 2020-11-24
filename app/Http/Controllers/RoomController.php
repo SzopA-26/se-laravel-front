@@ -145,7 +145,7 @@ class RoomController extends Controller
         $room = Http::get('http://localhost:9090/api/room/' . $id);
         $type = Http::get('http://localhost:9090/api/type/' . $room["type_id"]);
         $building = Http::get('http://localhost:9090/api/building/' . $room["building_id"]);
-        $room_images = Http::get('http://localhost:9090/api/room_image/room_id/' . $id);
+        $room_images = json_decode(Http::get('http://localhost:9090/api/room_images/room_id/'. $room['id']),true);
 
         return view('rooms.show',[
             'room' => $room,
@@ -169,9 +169,10 @@ class RoomController extends Controller
 
         $building = json_decode(Http::get('http://localhost:9090/api/building/' . $room["building_id"]),true);
         $users = json_decode(Http::get('http://localhost:9090/api/users/room_id/' . $room["id"]),true);
-
+        $room_images = json_decode(Http::get('http://localhost:9090/api/room_images/room_id/'. $room['id']),true);
 
         return view('rooms.showStaff',[
+            'roomImages' => $room_images,
             'room' => $room,
             'building'=> $building,
             'type' => $type,

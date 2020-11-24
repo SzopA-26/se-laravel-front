@@ -49,11 +49,11 @@
                                 <!-- main slider carousel items -->
 
                                 <div class="carousel-inner">
-{{--                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)--}}
-{{--                                    <div class="{{ $loop->first ? 'active' : '' }} carousel-item" data-slide-number="{{ $loop->index }}">--}}
-{{--                                        <img src="{{ $roomImage->image_path }}" class="img-fluid">--}}
-{{--                                    </div>--}}
-{{--                                    @endforeach--}}
+                                    @foreach($roomImages as $roomImage)
+                                    <div class="{{ $loop->first ? 'active' : '' }} carousel-item" data-slide-number="{{ $loop->index }}">
+                                        <img src="{{ $roomImage["image_path"] }}" class="img-fluid">
+                                    </div>
+                                    @endforeach
                                     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="sr-only">Previous</span>
@@ -66,13 +66,13 @@
                                 <!-- main slider carousel nav controls -->
 
                                 <ul class="carousel-indicators list-inline mx-auto border px-2">
-{{--                                    @foreach($room->roomImages->where('room_id',$room->id) as $roomImage)--}}
-{{--                                    <li class="list-inline-item active">--}}
-{{--                                        <a id="carousel-selector-0" class="selected" data-slide-to="{{ $loop->index }}" data-target="#myCarousel">--}}
-{{--                                            <img src="{{ $roomImage->image_path }}" class="img-fluid">--}}
-{{--                                        </a>--}}
-{{--                                    </li>--}}
-{{--                                    @endforeach--}}
+                                    @foreach($roomImages as $roomImage)
+                                    <li class="list-inline-item active">
+                                        <a id="carousel-selector-0" class="selected" data-slide-to="{{ $loop->index }}" data-target="#myCarousel">
+                                            <img src="{{ $roomImage['image_path'] }}" class="img-fluid">
+                                        </a>
+                                    </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>

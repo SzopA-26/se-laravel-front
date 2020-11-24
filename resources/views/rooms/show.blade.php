@@ -48,7 +48,7 @@
                                 <div class="carousel-inner">
                                     @foreach($room_images as $roomImage)
                                         <div class="{{ $loop->first ? 'active' : '' }} carousel-item" data-slide-number="{{ $loop->index }}">
-{{--                                            <img src="{{ $roomImage["image_path"] }}" class="img-fluid">--}}
+                                            <img src="{{ $roomImage["image_path"] }}" class="img-fluid">
                                         </div>
                                     @endforeach
                                     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
@@ -66,7 +66,7 @@
                                     @foreach($room_images as $roomImage)
                                         <li class="list-inline-item active">
                                             <a id="carousel-selector-0" class="selected" data-slide-to="{{ $loop->index }}" data-target="#myCarousel">
-{{--                                                <img src="{{ $roomImage["image_path"] }}" class="img-fluid">--}}
+                                                <img src="{{ $roomImage["image_path"] }}" class="img-fluid">
                                             </a>
                                         </li>
                                     @endforeach

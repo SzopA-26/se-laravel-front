@@ -20,12 +20,12 @@
             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{asset('/images/home1.jpg')}}"
-                     class="d-block w-100" alt="1" height="500">
-            </div>
             <div class="carousel-item">
                 <img src="https://www.homezoomer.com/wp-content/uploads/2019/01/Polis-Condo-Suksawat-64_8_resize.jpg"
+                     class="d-block w-100" alt="1" height="500">
+            </div>
+            <div class="carousel-item active">
+                <img src="{{asset('/images/home1.jpg')}}"
                      class="d-block w-100" alt="1" height="500">
             </div>
             <div class="carousel-item">
